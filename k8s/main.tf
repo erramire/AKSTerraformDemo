@@ -25,13 +25,7 @@ resource "azurerm_kubernetes_cluster" "main" {
   sku_tier                = var.sku_tier
   private_cluster_enabled = var.private_cluster_enabled
 
-  linux_profile {
-    admin_username = var.admin_username
-
-    ssh_key {
-            key_data = file(var.ssh_public_key)
-    }
-  }
+  
 
   dynamic "default_node_pool" {
     for_each = var.enable_auto_scaling == true ? [] : ["default_node_pool_manually_scaled"]
