@@ -1,0 +1,30 @@
+el pass phrase es asea2021
+pagina de referencia 
+https://docs.microsoft.com/en-us/azure/developer/terraform/create-k8s-cluster-with-tf-and-aks
+
+paso 1 generar ssh key con el siguiente comando:
+
+ssh-keygen -m PEM -t rsa -b 4096
+
+https://docs.microsoft.com/en-us/azure/virtual-machines/linux/ssh-from-windows#create-an-ssh-key-pair
+
+az storage container create -n tfstate --account-name <YourAzureStorageAccountName> --account-key <YourAzureStorageAccountKey>
+
+terraform init
+
+terraform plan -out main.tfplan
+
+terraform apply main.tfplan
+
+hacer esto para el rg de tfstate 
+y para el storage account del mismo 
+
+posteriormente crear el container del tfstate en el sa 
+
+az storage container create -n tfstate --account-name saterraformedrm --account-key 7bMx21NHlnbQb/rMY+exYOmWsUWVfiJCfsZLw0pLOGZJYucOY/p4oV5JEUVhGxdnsCWSFk/hGC9qrVoEPqfEQA==
+
+ahora se procede a crear el cluster de kubernetes 
+
+terraform init -backend-config="storage_account_name=saterraformedrm" -backend-config="container_name=tfstate" -backend-config="access_key=7bMx21NHlnbQb/rMY+exYOmWsUWVfiJCfsZLw0pLOGZJYucOY/p4oV5JEUVhGxdnsCWSFk/hGC9qrVoEPqfEQA==" -backend-config="key=codelab.microsoft.tfstate"
+
+az aks get-credentials --resource-group rg_ope_base_dev --name aksopebasedev
