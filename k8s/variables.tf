@@ -138,13 +138,13 @@ variable "sku_tier" {
 variable "enable_role_based_access_control" {
   description = "Enable Role Based Access Control."
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "rbac_aad_managed" {
   description = "Is the Azure Active Directory integration Managed, meaning that Azure will create/manage the Service Principal used for integration."
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "rbac_aad_admin_group_object_ids" {
