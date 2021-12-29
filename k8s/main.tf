@@ -98,11 +98,6 @@ resource "azurerm_kubernetes_cluster" "main" {
     azure_policy {
       enabled = var.enable_azure_policy
     }
-
-    oms_agent {
-      enabled                    = var.enable_log_analytics_workspace
-      log_analytics_workspace_id = var.enable_log_analytics_workspace ? azurerm_log_analytics_workspace.main[0].id : null
-    }
   }
 
   role_based_access_control {
@@ -139,32 +134,3 @@ resource "azurerm_kubernetes_cluster" "main" {
 
   tags = var.tags
 }
-
-
-resource "azurerm_log_analytics_workspace" "main" {
-  count               = var.enable_log_analytics_workspace ? 1 : 0
-  name                = var.cluster_log_analytics_workspace_name == null ? "${var.prefix}-workspace" : var.cluster_log_analytics_workspace_name
-  location            = data.azurerm_resource_group.main.location
-  resource_group_name = var.resource_group_name
-  sku                 = var.log_analytics_workspace_sku
-  retention_in_days   = var.log_retention_in_days
-
-  tags = var.tags
-}
-
-resource "azurerm_log_analytics_solution" "main" {
-  count                 = var.enable_log_analytics_workspace ? 1 : 0
-  solution_name         = "ContainerInsights"
-  location              = data.azurerm_resource_group.main.location
-  resource_group_name   = var.resource_group_name
-  workspace_resource_id = azurerm_log_analytics_workspace.main[0].id
-  workspace_name        = azurerm_log_analytics_workspace.main[0].name
-
-  plan {
-    publisher = "Microsoft"
-    product   = "OMSGallery/ContainerInsights"
-  }
-
-  tags = var.tags
-}
-
