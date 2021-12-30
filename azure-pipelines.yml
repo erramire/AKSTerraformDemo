@@ -1,0 +1,37 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  vmImage: windows-latest
+
+steps:
+- task: TerraformInstaller@0
+  inputs:
+    terraformVersion: 'latest'
+- task: TerraformTaskV2@2
+  inputs:
+    provider: 'azurerm'
+    command: 'init'   
+    backendServiceArm: 'Consumo interno de Microsoft Azure (3918e4e2-4e04-48ca-adba-f54b7f849786)'
+    backendAzureRmResourceGroupName: 'rg_ope_base_dev'
+    backendAzureRmStorageAccountName: 'satfopeaks'
+    backendAzureRmContainerName: 'tfstate'
+    backendAzureRmKey: '$(keysa)'
+- task: TerraformTaskV2@2
+  inputs:    
+    provider: 'azurerm'
+    command: 'plan'
+    commandOptions: '-out=tfplan'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/k8s'
+    environmentServiceNameAzureRM: 'Consumo interno de Microsoft Azure (3918e4e2-4e04-48ca-adba-f54b7f849786)'
+- task: TerraformTaskV2@2
+  inputs:    
+    provider: 'azurerm'
+    command: 'apply'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/k8s'
+    environmentServiceNameAzureRM: 'Consumo interno de Microsoft Azure (3918e4e2-4e04-48ca-adba-f54b7f849786)'
