@@ -23,15 +23,13 @@ steps:
     backendAzureRmContainerName: 'tfstate'
     backendAzureRmKey: '$(keysa)'
 - task: TerraformTaskV2@2
-  inputs:
-    provider: 'azurerm'
+  inputs:    
     command: 'plan'
     commandOptions: '-out=tfplan'
     workingDirectory: '$(System.DefaultWorkingDirectory)/k8s'
     environmentServiceNameAzureRM: 'Consumo interno de Microsoft Azure (3918e4e2-4e04-48ca-adba-f54b7f849786)'
 - task: TerraformTaskV2@2
-  inputs:
-    provider: 'azurerm'
+  inputs:    
     command: 'apply'
     workingDirectory: '$(System.DefaultWorkingDirectory)/k8s'
     environmentServiceNameAzureRM: 'Consumo interno de Microsoft Azure (3918e4e2-4e04-48ca-adba-f54b7f849786)'
