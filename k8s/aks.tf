@@ -20,8 +20,8 @@ resource "azurerm_kubernetes_cluster" "main" {
       name                   = var.agents_pool_name
       node_count             = var.agents_count
       vm_size                = var.agents_size
-      os_disk_size_gb        = var.os_disk_size_gb
-      vnet_subnet_id         = var.vnet_subnet_id
+      os_disk_size_gb        = var.os_disk_size_gb      
+      vnet_subnet_id         = azurerm_subnet.aks-default.id
       enable_auto_scaling    = var.enable_auto_scaling
       max_count              = var.max_count
       min_count              = var.min_count
@@ -42,7 +42,7 @@ resource "azurerm_kubernetes_cluster" "main" {
       name                   = var.agents_pool_name
       vm_size                = var.agents_size
       os_disk_size_gb        = var.os_disk_size_gb
-      vnet_subnet_id         = var.vnet_subnet_id
+      vnet_subnet_id         = azurerm_subnet.aks-default.id      
       enable_auto_scaling    = var.enable_auto_scaling
       max_count              = var.agents_max_count
       min_count              = var.agents_min_count
@@ -119,4 +119,5 @@ resource "azurerm_kubernetes_cluster" "main" {
   }
 
   tags = var.tags
+  depends_on = [azurerm_subnet.aks-default]
 }

@@ -81,12 +81,6 @@ variable "public_ssh_key" {
   default     = ""
 }
 
-variable "tags" {
-  type        = map(string)
-  description = "Any tags that should be present on the Virtual Network resources"
-  default     = {}
-}
-
 variable "enable_log_analytics_workspace" {
   type        = bool
   description = "Enable the creation of azurerm_log_analytics_workspace and azurerm_log_analytics_solution or not"
@@ -96,7 +90,7 @@ variable "enable_log_analytics_workspace" {
 variable "vnet_subnet_id" {
   description = "(Optional) The ID of a Subnet where the Kubernetes Node Pool should exist. Changing this forces a new resource to be created."
   type        = string
-  default     = null
+  default     = "aks-subnet"
 }
 
 variable "os_disk_size_gb" {
@@ -305,4 +299,66 @@ variable "enable_host_encryption" {
   description = "Enable Host Encryption for default node pool. Encryption at host feature must be enabled on the subscription: https://docs.microsoft.com/azure/virtual-machines/linux/disks-enable-host-based-encryption-cli"
   type        = bool
   default     = false
+}
+
+variable "location" {
+    description = "Location of the cluster."
+    default = "southcentralus"
+}
+
+
+
+variable "virtual_network_name" {
+    description = "Virtual network name"
+    default     = "aks-vnet-ope-dev"
+}
+
+
+variable "aks_subnet_name" {
+    description = "Subnet Name."
+    default     = "aks-subnet"
+}
+
+
+variable "app_gateway_subnet_name" {
+    description = "Subnet name."
+    default     = "appgwsubnet"
+}
+
+variable "app_gateway_publicip_name" {
+    description = "app gateway public ip name."
+    default     = "appgwy-ope-publicip"
+}
+
+variable "app_gateway_subnet_address_prefix" {
+    description = "Subnet server IP address."
+    default     = ["11.1.0.0/16"]
+}
+
+variable "app_gateway_name" {
+    description = "Name of the Application Gateway"
+    default = "appgwyopebasedev"
+}
+
+variable "app_gateway_sku" {
+    description = "Name of the Application Gateway SKU"
+    default = "Standard_v2"
+}
+variable "acr_name" {
+    description = "Name of the Container registry"
+    default = "acropebasedev"
+}
+
+variable "acr_sku" {
+    description = "Name of the Container Registry SKU"
+    default = "Standard"
+}
+variable "tags" {
+    type = map(string)
+
+    default = {
+    source = "terraform",
+    app = "ope",
+    env = "dev"
+    }
 }
